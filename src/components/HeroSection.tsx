@@ -45,11 +45,11 @@ const HeroSection = () => {
 
             {/* Trust Indicators */}
             <div className="flex items-center justify-center lg:justify-start space-x-6 rtl:space-x-reverse pt-8">
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img 
                   src="/lovable-uploads/44b9db56-e7c4-4848-9600-e65db685cbd8.png" 
                   alt="Shomoos Logo" 
-                  className="h-8 w-auto"
+                  className="h-12 w-auto"
                 />
                 <span className="text-sm text-muted-foreground">
                   {language === 'ar' ? 'متكامل مع شموس' : 'Integrated with Shomoos'}

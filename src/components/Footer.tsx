@@ -25,7 +25,7 @@ const Footer = () => {
             <img 
               src="/lovable-uploads/44b9db56-e7c4-4848-9600-e65db685cbd8.png" 
               alt="Shomoos Logo" 
-              className="h-6 w-auto filter invert"
+              className="h-10 w-auto filter invert"
             />
           </div>
 
