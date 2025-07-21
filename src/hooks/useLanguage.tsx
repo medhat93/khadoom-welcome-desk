@@ -54,6 +54,23 @@ const translations = {
     visual2Desc: 'تقنية ذكية للتحقق من صحة الوثائق الرسمية',
     visual3Title: 'تقارير شاملة',
     visual3Desc: 'احصل على تقارير مفصلة عن جميع الضيوف والحجوزات',
+    
+    // Services Section
+    servicesTitle: 'المميزات الأساسية المتاحة الآن',
+    servicesSubtitle: 'ابدأ بمميزات تسجيل الوصول والدفع الأساسية. المزيد من الخدمات قريباً!',
+    service1Title: 'ID Verification',
+    service1Desc: 'ارفع وتحقق من جواز سفرك أو هويتك لعملية تسجيل وصول سلسة',
+    service2Title: 'Security Deposit Payment', 
+    service2Desc: 'دفع آمن عبر الإنترنت لتأمينات الضمان مع تأكيد فوري',
+    service3Title: 'Digital Self Check-in',
+    service3Desc: 'أكمل عملية تسجيل الوصول من هاتفك مع التحقق من الهوية وتخصيص الغرفة',
+    service4Title: 'خدمات الكونسيرج',
+    service4Desc: 'احصل على توصيات محلية ومساعدة في الحجز',
+    service5Title: 'طلبات الصيانة',
+    service5Desc: 'أبلغ وتتبع مشاكل الصيانة في إقامتك',
+    service6Title: 'خدمة الغرف',
+    service6Desc: 'اطلب الطعام والمشروبات والمستلزمات مباشرة إلى غرفتك',
+    comingSoon: 'قريباً',
   },
   en: {
     // Navigation
@@ -98,6 +115,23 @@ const translations = {
     visual2Desc: 'Smart technology to verify official document authenticity',
     visual3Title: 'Comprehensive Reports',
     visual3Desc: 'Get detailed reports on all guests and bookings',
+    
+    // Services Section
+    servicesTitle: 'Basic Features Available Now',
+    servicesSubtitle: 'Start with basic check-in and payment features. More services coming soon!',
+    service1Title: 'ID Verification',
+    service1Desc: 'Upload and verify your passport or ID for seamless registration',
+    service2Title: 'Security Deposit Payment',
+    service2Desc: 'Secure online payment for security deposits with instant confirmation',
+    service3Title: 'Digital Self Check-in',
+    service3Desc: 'Complete arrival registration from your phone with ID verification and room assignment',
+    service4Title: 'Concierge Services',
+    service4Desc: 'Get local recommendations and booking assistance',
+    service5Title: 'Maintenance Requests',
+    service5Desc: 'Report and track maintenance issues in your accommodation',
+    service6Title: 'Room Service',
+    service6Desc: 'Order food, drinks, and supplies directly to your room',
+    comingSoon: 'Coming Soon',
   }
 };
 
