@@ -96,7 +96,7 @@ const ServicesSection = () => {
                       : 'bg-muted/30 group-hover:bg-muted/40'
                   }`}>
                     {service.isPayment ? (
-                      service.icons.map((Icon, iconIndex) => (
+                      (service.icons ?? []).map((Icon, iconIndex) => (
                         <Icon key={iconIndex} className={`h-6 w-6 ${service.color}`} />
                       ))
                     ) : (
