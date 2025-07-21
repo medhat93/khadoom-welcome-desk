@@ -4,7 +4,6 @@ import {
   Upload, 
   CreditCard,
   Smartphone,
-  Smartphone, 
   User, 
   Shield, 
   Clock
