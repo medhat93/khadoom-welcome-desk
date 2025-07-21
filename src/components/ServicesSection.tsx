@@ -2,7 +2,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   Upload, 
-  CreditCard, 
+  CreditCard,
+  Smartphone,
   Smartphone, 
   User, 
   Shield, 
@@ -21,11 +22,12 @@ const ServicesSection = () => {
       color: 'text-primary'
     },
     {
-      icon: CreditCard,
+      icons: [CreditCard, Smartphone],
       title: t('service2Title'),
       description: t('service2Desc'),
       available: true,
-      color: 'text-primary'
+      color: 'text-primary',
+      isPayment: true
     },
     {
       icon: Smartphone,
@@ -88,12 +90,18 @@ const ServicesSection = () => {
               
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
-                  <div className={`p-4 rounded-2xl transition-all duration-300 ${
+                  <div className={`p-4 rounded-2xl transition-all duration-300 flex items-center gap-2 ${
                     service.available 
                       ? 'bg-gradient-to-br from-primary/10 to-primary-light/10 group-hover:from-primary/20 group-hover:to-primary-light/20'
                       : 'bg-muted/30 group-hover:bg-muted/40'
                   }`}>
-                    <service.icon className={`h-8 w-8 ${service.color}`} />
+                    {service.isPayment ? (
+                      service.icons.map((Icon, iconIndex) => (
+                        <Icon key={iconIndex} className={`h-6 w-6 ${service.color}`} />
+                      ))
+                    ) : (
+                      <service.icon className={`h-8 w-8 ${service.color}`} />
+                    )}
                   </div>
                 </div>
                 
@@ -108,6 +116,19 @@ const ServicesSection = () => {
                 }`}>
                   {service.description}
                 </p>
+                
+                {service.isPayment && service.available && (
+                  <div className="mt-4 pt-4 border-t border-border/50">
+                    <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
+                      <span className="font-medium">مدعوم:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-primary/10 text-primary px-2 py-1 rounded">مدى</span>
+                        <span className="bg-primary/10 text-primary px-2 py-1 rounded">Apple Pay</span>
+                        <span className="bg-primary/10 text-primary px-2 py-1 rounded">Visa/MC</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
