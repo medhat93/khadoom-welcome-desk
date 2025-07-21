@@ -47,7 +47,7 @@ const HeroSection = () => {
             <div className="flex items-center justify-center lg:justify-start space-x-6 rtl:space-x-reverse pt-8">
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img 
-                  src="/lovable-uploads/44b9db56-e7c4-4848-9600-e65db685cbd8.png" 
+                  src="/lovable-uploads/WhatsApp_Image_2025-07-21_at_22.28.31-removebg-preview.png" 
                   alt="Shomoos Logo" 
                   className="h-12 w-auto"
                 />
