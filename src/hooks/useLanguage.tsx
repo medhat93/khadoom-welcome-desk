@@ -71,6 +71,12 @@ const translations = {
     service6Title: 'خدمة الغرف',
     service6Desc: 'اطلب الطعام والمشروبات والمستلزمات مباشرة إلى غرفتك',
     comingSoon: 'قريباً',
+    
+    // CTA Buttons
+    getStarted: 'ابدأ الآن',
+    tryDemo: 'جرب النموذج',
+    hostLogin: 'دخول مالك العقار',
+    guestAccess: 'دخول الضيف',
   },
   en: {
     // Navigation
@@ -132,6 +138,12 @@ const translations = {
     service6Title: 'Room Service',
     service6Desc: 'Order food, drinks, and supplies directly to your room',
     comingSoon: 'Coming Soon',
+    
+    // CTA Buttons
+    getStarted: 'Get Started',
+    tryDemo: 'Try Demo',
+    hostLogin: 'Host Login',
+    guestAccess: 'Guest Access',
   }
 };
 
