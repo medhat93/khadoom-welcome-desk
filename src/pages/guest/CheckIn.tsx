@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Shield, User, Users, CreditCard, FileText, Check, Upload } from 'lucide-react';
 
@@ -22,7 +24,8 @@ const GuestCheckIn = () => {
     email: '',
     idNumber: '',
     companions: [{ name: '', idNumber: '', relationship: '' }],
-    paymentMethod: 'card' as 'card' | 'iban',
+    paymentMethod: 'credit' as 'credit' | 'other',
+    otherPaymentMethod: '',
     iban: ''
   });
 
@@ -86,8 +89,12 @@ const GuestCheckIn = () => {
       securityDeposit: 'التأمين',
       depositAmount: 'مبلغ التأمين',
       paymentMethod: 'طريقة الدفع',
-      card: 'بطاقة ائتمان',
-      iban: 'حساب بنكي (IBAN)',
+      creditCard: 'بطاقة ائتمان',
+      otherPaymentOptions: 'خيارات دفع أخرى',
+      madaPay: 'مدى',
+      stcPay: 'STC Pay',
+      applePay: 'Apple Pay',
+      refundIban: 'حساب استرداد التأمين',
       ibanNumber: 'رقم الآيبان',
       payDeposit: 'دفع التأمين',
       completion: 'اكتمال التسجيل',
@@ -121,8 +128,12 @@ const GuestCheckIn = () => {
       securityDeposit: 'Security Deposit',
       depositAmount: 'Deposit Amount',
       paymentMethod: 'Payment Method',
-      card: 'Credit Card',
-      iban: 'Bank Account (IBAN)',
+      creditCard: 'Credit Card',
+      otherPaymentOptions: 'Other Payment Options',
+      madaPay: 'Mada Pay',
+      stcPay: 'STC Pay',
+      applePay: 'Apple Pay',
+      refundIban: 'Insurance Refund Account',
       ibanNumber: 'IBAN Number',
       payDeposit: 'Pay Deposit',
       completion: 'Check-In Complete',
@@ -313,38 +324,56 @@ const GuestCheckIn = () => {
                 <p className="font-medium">{t_local('depositAmount')}: {unitData.depositAmount} ر.س</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <label className="text-sm font-medium">{t_local('paymentMethod')}</label>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant={formData.paymentMethod === 'card' ? 'default' : 'outline'}
-                    onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'card' }))}
-                    className="flex-1"
-                  >
-                    {t_local('card')}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={formData.paymentMethod === 'iban' ? 'default' : 'outline'}
-                    onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'iban' }))}
-                    className="flex-1"
-                  >
-                    {t_local('iban')}
-                  </Button>
-                </div>
-              </div>
+                
+                <RadioGroup
+                  value={formData.paymentMethod}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, paymentMethod: value as 'credit' | 'other' }))}
+                  className="space-y-3"
+                >
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <RadioGroupItem value="credit" id="credit" />
+                    <label htmlFor="credit" className="text-sm font-medium">{t_local('creditCard')}</label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <RadioGroupItem value="other" id="other" />
+                    <label htmlFor="other" className="text-sm font-medium">{t_local('otherPaymentOptions')}</label>
+                  </div>
+                </RadioGroup>
 
-              {formData.paymentMethod === 'iban' && (
-                <div>
-                  <label className="text-sm font-medium">{t_local('ibanNumber')}</label>
-                  <Input
-                    value={formData.iban}
-                    onChange={(e) => setFormData(prev => ({ ...prev, iban: e.target.value }))}
-                    placeholder="SA00 0000 0000 0000 0000 0000"
-                  />
-                </div>
-              )}
+                {formData.paymentMethod === 'other' && (
+                  <div className="space-y-4 border border-soft rounded-lg p-4 bg-muted/30">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">اختر طريقة الدفع:</label>
+                      <Select 
+                        value={formData.otherPaymentMethod} 
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, otherPaymentMethod: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="اختر طريقة الدفع" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="mada">{t_local('madaPay')}</SelectItem>
+                          <SelectItem value="stc">{t_local('stcPay')}</SelectItem>
+                          <SelectItem value="apple">{t_local('applePay')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium">{t_local('refundIban')}</label>
+                      <Input
+                        value={formData.iban}
+                        onChange={(e) => setFormData(prev => ({ ...prev, iban: e.target.value }))}
+                        placeholder="SA00 0000 0000 0000 0000 0000"
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <Button onClick={handlePayment} className="w-full" variant="cta">
                 <CreditCard className="mr-2 h-4 w-4" />
