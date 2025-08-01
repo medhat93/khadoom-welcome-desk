@@ -6,12 +6,14 @@ import DashboardHeader from '@/components/DashboardHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { Plus, Building, Users, DollarSign, TrendingUp, QrCode, Settings } from 'lucide-react';
 import type { Property, Unit } from '@/types';
 
 const HostDashboard = () => {
   const { language } = useLanguage();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   // Mock data for prototype
@@ -249,7 +251,14 @@ const HostDashboard = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => alert('QR Code generation')}
+                            onClick={() => {
+                              const link = `${window.location.origin}/guest/checkin/${property.units[0]?.id || '1'}`;
+                              navigator.clipboard.writeText(link);
+                              toast({
+                                title: language === 'ar' ? 'تم نسخ الرابط' : 'Link Copied',
+                                description: link
+                              });
+                            }}
                           >
                             <QrCode className="h-4 w-4" />
                           </Button>

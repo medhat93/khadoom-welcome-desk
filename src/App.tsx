@@ -14,6 +14,9 @@ import HostDashboard from "./pages/host/Dashboard";
 import AddProperty from "./pages/host/AddProperty";
 import PropertyDetails from "./pages/host/PropertyDetails";
 import UnitDetails from "./pages/host/UnitDetails";
+import PropertiesPage from "./pages/host/Properties";
+import GuestsPage from "./pages/host/Guests";
+import SettingsPage from "./pages/host/Settings";
 import GuestCheckIn from "./pages/guest/CheckIn";
 import GuestDashboard from "./pages/guest/Dashboard";
 import GuestCheckOut from "./pages/guest/CheckOut";
@@ -39,6 +42,9 @@ const App = () => (
               
               {/* Host Routes */}
               <Route path="/host/dashboard" element={<HostDashboard />} />
+              <Route path="/host/properties" element={<PropertiesPage />} />
+              <Route path="/host/guests" element={<GuestsPage />} />
+              <Route path="/host/settings" element={<SettingsPage />} />
               <Route path="/host/add-property" element={<AddProperty />} />
               <Route path="/host/property/:id" element={<PropertyDetails />} />
               <Route path="/host/unit/:id" element={<UnitDetails />} />

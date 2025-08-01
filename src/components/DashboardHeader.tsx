@@ -61,6 +61,7 @@ const DashboardHeader = () => {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => navigate('/host/properties')}
             className="flex items-center space-x-2 rtl:space-x-reverse"
           >
             <Building className="h-4 w-4" />
@@ -70,6 +71,7 @@ const DashboardHeader = () => {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => navigate('/host/guests')}
             className="flex items-center space-x-2 rtl:space-x-reverse"
           >
             <Users className="h-4 w-4" />
@@ -79,6 +81,7 @@ const DashboardHeader = () => {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => navigate('/host/settings')}
             className="flex items-center space-x-2 rtl:space-x-reverse"
           >
             <Settings className="h-4 w-4" />

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Header from '@/components/Header';
+import DashboardHeader from '@/components/DashboardHeader';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Building, Search, Check } from 'lucide-react';
 
@@ -108,7 +108,7 @@ const AddProperty = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <DashboardHeader />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
