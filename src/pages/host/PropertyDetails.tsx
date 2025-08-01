@@ -4,6 +4,9 @@ import DashboardHeader from '@/components/DashboardHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { ArrowLeft, Plus, Settings, QrCode, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -14,9 +17,14 @@ const PropertyDetails = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
+  const [showAddUnitDialog, setShowAddUnitDialog] = useState(false);
+  const [newUnit, setNewUnit] = useState({
+    name: '',
+    depositAmount: ''
+  });
 
   // Mock property data
-  const property = {
+  const [property, setProperty] = useState({
     id: id,
     name: 'شقة الروشة المطلة على البحر',
     description: 'شقة فاخرة بإطلالة رائعة على البحر',
@@ -39,7 +47,7 @@ const PropertyDetails = () => {
         status: 'available'
       }
     ]
-  };
+  });
 
   const translations = {
     ar: {
@@ -61,7 +69,13 @@ const PropertyDetails = () => {
       propertyInfo: 'معلومات العقار',
       location: 'الموقع',
       type: 'النوع',
-      license: 'رقم الرخصة'
+      license: 'رقم الرخصة',
+      addUnitDialog: 'إضافة وحدة جديدة',
+      unitNameLabel: 'اسم الوحدة',
+      depositLabel: 'مبلغ التأمين (ريال)',
+      cancel: 'إلغاء',
+      addUnitBtn: 'إضافة وحدة',
+      unitAdded: 'تم إضافة الوحدة بنجاح'
     },
     en: {
       propertyDetails: 'Property Details',
@@ -82,8 +96,47 @@ const PropertyDetails = () => {
       propertyInfo: 'Property Information',
       location: 'Location',
       type: 'Type',
-      license: 'License Number'
+      license: 'License Number',
+      addUnitDialog: 'Add New Unit',
+      unitNameLabel: 'Unit Name',
+      depositLabel: 'Deposit Amount (SAR)',
+      cancel: 'Cancel',
+      addUnitBtn: 'Add Unit',
+      unitAdded: 'Unit Added Successfully'
     }
+  };
+
+  const handleAddUnit = () => {
+    if (!newUnit.name || !newUnit.depositAmount) {
+      toast({
+        title: language === 'ar' ? 'خطأ' : 'Error',
+        description: language === 'ar' ? 'يرجى ملء جميع الحقول' : 'Please fill all fields',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const unitId = String(property.units.length + 1);
+    const newUnitData = {
+      id: unitId,
+      name: newUnit.name,
+      depositAmount: parseInt(newUnit.depositAmount),
+      checkInLink: `${window.location.origin}/guest/checkin/${unitId}`,
+      status: 'available' as const
+    };
+
+    setProperty(prev => ({
+      ...prev,
+      units: [...prev.units, newUnitData]
+    }));
+
+    setNewUnit({ name: '', depositAmount: '' });
+    setShowAddUnitDialog(false);
+    
+    toast({
+      title: t('unitAdded'),
+      description: language === 'ar' ? `تم إضافة ${newUnit.name} بنجاح` : `${newUnit.name} added successfully`
+    });
   };
 
   const t = (key: keyof typeof translations.ar) => translations[language][key];
@@ -172,10 +225,60 @@ const PropertyDetails = () => {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>{t('units')}</CardTitle>
-                  <Button variant="cta" size="sm">
-                    <Plus className="mr-2 h-4 w-4" />
-                    {t('addUnit')}
-                  </Button>
+                  <Dialog open={showAddUnitDialog} onOpenChange={setShowAddUnitDialog}>
+                    <DialogTrigger asChild>
+                      <Button variant="cta" size="sm">
+                        <Plus className="mr-2 h-4 w-4" />
+                        {t('addUnit')}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>{t('addUnitDialog')}</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="unit-name" className="text-sm font-medium">
+                            {t('unitNameLabel')}
+                          </Label>
+                          <Input
+                            id="unit-name"
+                            value={newUnit.name}
+                            onChange={(e) => setNewUnit(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder={language === 'ar' ? 'مثال: الوحدة الثالثة' : 'Example: Unit Three'}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="deposit-amount" className="text-sm font-medium">
+                            {t('depositLabel')}
+                          </Label>
+                          <Input
+                            id="deposit-amount"
+                            type="number"
+                            value={newUnit.depositAmount}
+                            onChange={(e) => setNewUnit(prev => ({ ...prev, depositAmount: e.target.value }))}
+                            placeholder="500"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowAddUnitDialog(false)}
+                            className="flex-1"
+                          >
+                            {t('cancel')}
+                          </Button>
+                          <Button
+                            onClick={handleAddUnit}
+                            className="flex-1"
+                            variant="cta"
+                          >
+                            {t('addUnitBtn')}
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardHeader>
               <CardContent>
