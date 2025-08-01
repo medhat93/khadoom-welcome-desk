@@ -27,12 +27,10 @@ const GuestCheckOut = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [feedback, setFeedback] = useState({
     rating: '',
-    review: '',
-    depositRefund: 'full' as 'full' | 'partial' | 'none',
-    reason: ''
+    review: ''
   });
 
-  const totalSteps = 4;
+  const totalSteps = 3;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
   const translations = {
@@ -50,11 +48,8 @@ const GuestCheckOut = () => {
       good: 'جيد',
       fair: 'مقبول',
       poor: 'سيء',
-      depositRefund: 'استرداد التأمين',
-      fullRefund: 'استرداد كامل',
-      partialRefund: 'استرداد جزئي',
-      noRefund: 'لا يوجد استرداد',
-      refundReason: 'سبب عدم الاسترداد الكامل',
+      depositInfo: 'معلومات استرداد التأمين',
+      depositInfoDesc: 'سيتم فحص الوحدة واسترداد التأمين بعد التأكد من حالتها. ستتلقى حالة الاسترداد خلال 24 ساعة.',
       feedback: 'التقييم والمراجعة',
       rateExperience: 'قيم تجربتك',
       writeReview: 'اكتب مراجعة (اختياري)',
@@ -81,11 +76,8 @@ const GuestCheckOut = () => {
       good: 'Good',
       fair: 'Fair',
       poor: 'Poor',
-      depositRefund: 'Deposit Refund',
-      fullRefund: 'Full Refund',
-      partialRefund: 'Partial Refund',
-      noRefund: 'No Refund',
-      refundReason: 'Reason for partial/no refund',
+      depositInfo: 'Deposit Refund Information',
+      depositInfoDesc: 'The unit will be inspected and your deposit refunded after confirming its condition. You will receive refund status within 24 hours.',
       feedback: 'Feedback & Review',
       rateExperience: 'Rate your experience',
       writeReview: 'Write a review (optional)',
@@ -128,7 +120,7 @@ const GuestCheckOut = () => {
       description: language === 'ar' ? 'شكراً لاستخدام خدماتنا' : 'Thank you for using our services'
     });
     // In real app, this would submit the checkout data
-    setCurrentStep(4);
+    setCurrentStep(3);
   };
 
   const renderStep = () => {
@@ -205,7 +197,7 @@ const GuestCheckOut = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5" />
-                {t('depositRefund')}
+                {t('depositInfo')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -213,48 +205,10 @@ const GuestCheckOut = () => {
                 <p className="font-medium">{language === 'ar' ? 'مبلغ التأمين:' : 'Deposit Amount:'} {unitData.depositAmount} ر.س</p>
               </div>
 
-              <div className="space-y-4">
-                <RadioGroup
-                  value={feedback.depositRefund}
-                  onValueChange={(value) => setFeedback(prev => ({ ...prev, depositRefund: value as any }))}
-                  className="space-y-3"
-                >
-                  <div className="flex items-center space-x-2 rtl:space-x-reverse border border-soft rounded-lg p-4">
-                    <RadioGroupItem value="full" id="full" />
-                    <label htmlFor="full" className="text-sm font-medium flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-600" />
-                      {t('fullRefund')}
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 rtl:space-x-reverse border border-soft rounded-lg p-4">
-                    <RadioGroupItem value="partial" id="partial" />
-                    <label htmlFor="partial" className="text-sm font-medium flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-yellow-600" />
-                      {t('partialRefund')}
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 rtl:space-x-reverse border border-soft rounded-lg p-4">
-                    <RadioGroupItem value="none" id="none" />
-                    <label htmlFor="none" className="text-sm font-medium flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4 text-red-600" />
-                      {t('noRefund')}
-                    </label>
-                  </div>
-                </RadioGroup>
-
-                {(feedback.depositRefund === 'partial' || feedback.depositRefund === 'none') && (
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">{t('refundReason')}</label>
-                    <Textarea
-                      value={feedback.reason}
-                      onChange={(e) => setFeedback(prev => ({ ...prev, reason: e.target.value }))}
-                      placeholder={language === 'ar' ? 'اذكر السبب...' : 'Please specify the reason...'}
-                      className="min-h-[100px]"
-                    />
-                  </div>
-                )}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-800">
+                  {t('depositInfoDesc')}
+                </p>
               </div>
 
               <div className="flex gap-3">
@@ -322,7 +276,7 @@ const GuestCheckOut = () => {
           </Card>
         );
 
-      case 4:
+      case 3:
         return (
           <Card>
             <CardHeader>

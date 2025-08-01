@@ -6,9 +6,29 @@ import DashboardHeader from '@/components/DashboardHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Building, Users, DollarSign, TrendingUp, QrCode, Settings } from 'lucide-react';
+import { Plus, Building, Users, DollarSign, TrendingUp, QrCode, Settings, Bell, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import type { Property, Unit } from '@/types';
+
+interface CheckoutRequest {
+  id: string;
+  guestName: string;
+  unitName: string;
+  propertyName: string;
+  checkOutDate: string;
+  unitCondition: string;
+  guestReview: string;
+  rating: number;
+  depositRefundStatus: 'pending' | 'full' | 'partial' | 'none';
+  refundAmount?: number;
+  refundReason?: string;
+  guestApproved?: boolean;
+}
 
 const HostDashboard = () => {
   const { language } = useLanguage();
@@ -17,6 +37,27 @@ const HostDashboard = () => {
   const navigate = useNavigate();
 
   // Mock data for prototype
+  const [checkoutRequests, setCheckoutRequests] = useState<CheckoutRequest[]>([
+    {
+      id: '1',
+      guestName: 'أحمد محمد',
+      unitName: 'الوحدة الأولى',
+      propertyName: 'شقة الروشة المطلة على البحر',
+      checkOutDate: new Date().toISOString(),
+      unitCondition: 'excellent',
+      guestReview: 'إقامة رائعة، النظافة ممتازة والموقع مثالي',
+      rating: 5,
+      depositRefundStatus: 'pending'
+    }
+  ]);
+  
+  const [selectedRequest, setSelectedRequest] = useState<CheckoutRequest | null>(null);
+  const [refundDecision, setRefundDecision] = useState({
+    type: 'full' as 'full' | 'partial' | 'none',
+    amount: '',
+    reason: ''
+  });
+
   const [properties] = useState<Property[]>([
     {
       id: '1',
@@ -77,7 +118,24 @@ const HostDashboard = () => {
       maintenance: 'صيانة',
       viewDetails: 'عرض التفاصيل',
       generateQR: 'رمز QR',
-      logout: 'تسجيل الخروج'
+      logout: 'تسجيل الخروج',
+      checkoutRequests: 'طلبات المغادرة',
+      newCheckout: 'طلب مغادرة جديد',
+      guestName: 'اسم النزيل',
+      unitCondition: 'حالة الوحدة',
+      rating: 'التقييم',
+      checkOutDate: 'تاريخ المغادرة',
+      processRefund: 'معالجة الاسترداد',
+      refundType: 'نوع الاسترداد',
+      fullRefund: 'استرداد كامل',
+      partialRefund: 'استرداد جزئي',
+      noRefund: 'لا يوجد استرداد',
+      refundAmount: 'مبلغ الاسترداد',
+      refundReason: 'سبب الاسترداد الجزئي/عدم الاسترداد',
+      processDeposit: 'معالجة التأمين',
+      pending: 'في الانتظار',
+      approved: 'موافق عليه',
+      waitingApproval: 'في انتظار موافقة النزيل'
     },
     en: {
       dashboard: 'Dashboard',
@@ -96,7 +154,24 @@ const HostDashboard = () => {
       maintenance: 'Maintenance',
       viewDetails: 'View Details',
       generateQR: 'QR Code',
-      logout: 'Logout'
+      logout: 'Logout',
+      checkoutRequests: 'Checkout Requests',
+      newCheckout: 'New Checkout Request',
+      guestName: 'Guest Name',
+      unitCondition: 'Unit Condition',
+      rating: 'Rating',
+      checkOutDate: 'Check-Out Date',
+      processRefund: 'Process Refund',
+      refundType: 'Refund Type',
+      fullRefund: 'Full Refund',
+      partialRefund: 'Partial Refund',
+      noRefund: 'No Refund',
+      refundAmount: 'Refund Amount',
+      refundReason: 'Reason for partial/no refund',
+      processDeposit: 'Process Deposit',
+      pending: 'Pending',
+      approved: 'Approved',
+      waitingApproval: 'Waiting for Guest Approval'
     }
   };
 
@@ -109,6 +184,28 @@ const HostDashboard = () => {
       case 'maintenance': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const handleRefundDecision = (request: CheckoutRequest) => {
+    const updatedRequest = {
+      ...request,
+      depositRefundStatus: refundDecision.type as 'full' | 'partial' | 'none',
+      refundAmount: refundDecision.type === 'partial' ? parseFloat(refundDecision.amount) : 
+                   refundDecision.type === 'full' ? 500 : 0,
+      refundReason: refundDecision.reason,
+      guestApproved: refundDecision.type === 'full' ? true : false
+    };
+
+    setCheckoutRequests(prev => prev.map(r => r.id === request.id ? updatedRequest : r));
+    setSelectedRequest(null);
+    setRefundDecision({ type: 'full', amount: '', reason: '' });
+
+    toast({
+      title: language === 'ar' ? 'تم معالجة طلب الاسترداد' : 'Refund Request Processed',
+      description: refundDecision.type === 'full' 
+        ? (language === 'ar' ? 'سيتم الاسترداد الكامل خلال 2-3 أيام' : 'Full refund will be processed in 2-3 days')
+        : (language === 'ar' ? 'في انتظار موافقة النزيل' : 'Waiting for guest approval')
+    });
   };
 
   return (
@@ -182,6 +279,170 @@ const HostDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Checkout Requests Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              {t_local('checkoutRequests')}
+              {checkoutRequests.length > 0 && (
+                <Badge variant="destructive" className="ml-2">
+                  {checkoutRequests.length}
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {checkoutRequests.length === 0 ? (
+              <div className="text-center py-4 text-muted-foreground">
+                {language === 'ar' ? 'لا توجد طلبات مغادرة' : 'No checkout requests'}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {checkoutRequests.map((request) => (
+                  <Card key={request.id} className="border-soft">
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-semibold">{request.guestName}</h3>
+                            <Badge 
+                              className={`${
+                                request.depositRefundStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                request.depositRefundStatus === 'full' && request.guestApproved ? 'bg-green-100 text-green-800' :
+                                'bg-blue-100 text-blue-800'
+                              }`}
+                            >
+                              {request.depositRefundStatus === 'pending' ? t_local('pending') :
+                               request.depositRefundStatus === 'full' && request.guestApproved ? t_local('approved') :
+                               t_local('waitingApproval')}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {request.unitName} - {request.propertyName}
+                          </p>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {new Date(request.checkOutDate).toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <CheckCircle className="h-4 w-4" />
+                              {language === 'ar' ? 'الحالة: ' : 'Condition: '}{request.unitCondition}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              ⭐ {request.rating}/5
+                            </span>
+                          </div>
+                          {request.guestReview && (
+                            <p className="text-sm italic text-muted-foreground">
+                              "{request.guestReview}"
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          {request.depositRefundStatus === 'pending' && (
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => setSelectedRequest(request)}
+                                >
+                                  {t_local('processRefund')}
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-md">
+                                <DialogHeader>
+                                  <DialogTitle>{t_local('processDeposit')}</DialogTitle>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <div>
+                                    <Label className="text-sm font-medium">{t_local('refundType')}</Label>
+                                    <RadioGroup
+                                      value={refundDecision.type}
+                                      onValueChange={(value) => setRefundDecision(prev => ({ ...prev, type: value as any }))}
+                                      className="mt-2"
+                                    >
+                                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                        <RadioGroupItem value="full" id="full-host" />
+                                        <label htmlFor="full-host" className="text-sm">
+                                          {t_local('fullRefund')} (500 ر.س)
+                                        </label>
+                                      </div>
+                                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                        <RadioGroupItem value="partial" id="partial-host" />
+                                        <label htmlFor="partial-host" className="text-sm">
+                                          {t_local('partialRefund')}
+                                        </label>
+                                      </div>
+                                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                        <RadioGroupItem value="none" id="none-host" />
+                                        <label htmlFor="none-host" className="text-sm">
+                                          {t_local('noRefund')}
+                                        </label>
+                                      </div>
+                                    </RadioGroup>
+                                  </div>
+
+                                  {refundDecision.type === 'partial' && (
+                                    <div>
+                                      <Label htmlFor="refund-amount" className="text-sm font-medium">
+                                        {t_local('refundAmount')} (ر.س)
+                                      </Label>
+                                      <Input
+                                        id="refund-amount"
+                                        type="number"
+                                        value={refundDecision.amount}
+                                        onChange={(e) => setRefundDecision(prev => ({ ...prev, amount: e.target.value }))}
+                                        placeholder="0"
+                                        max="500"
+                                      />
+                                    </div>
+                                  )}
+
+                                  {(refundDecision.type === 'partial' || refundDecision.type === 'none') && (
+                                    <div>
+                                      <Label htmlFor="refund-reason" className="text-sm font-medium">
+                                        {t_local('refundReason')}
+                                      </Label>
+                                      <Textarea
+                                        id="refund-reason"
+                                        value={refundDecision.reason}
+                                        onChange={(e) => setRefundDecision(prev => ({ ...prev, reason: e.target.value }))}
+                                        placeholder={language === 'ar' ? 'اذكر السبب...' : 'Enter reason...'}
+                                        className="min-h-[80px]"
+                                      />
+                                    </div>
+                                  )}
+
+                                  <div className="flex gap-2">
+                                    <Button
+                                      onClick={() => selectedRequest && handleRefundDecision(selectedRequest)}
+                                      className="flex-1"
+                                      variant="cta"
+                                      disabled={
+                                        refundDecision.type === 'partial' && (!refundDecision.amount || !refundDecision.reason) ||
+                                        refundDecision.type === 'none' && !refundDecision.reason
+                                      }
+                                    >
+                                      {language === 'ar' ? 'معالجة' : 'Process'}
+                                    </Button>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Properties Section */}
         <Card>
