@@ -20,8 +20,7 @@ const Signup = () => {
     email: '',
     phone: '',
     password: '',
-    confirmPassword: '',
-    role: 'host' as 'host' | 'guest'
+    confirmPassword: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [nafathVerified, setNafathVerified] = useState(false);
@@ -55,7 +54,7 @@ const Signup = () => {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        role: formData.role,
+        role: 'host',
         nafathVerified: true
       }, formData.password);
       
@@ -65,12 +64,8 @@ const Signup = () => {
           description: language === 'ar' ? 'مرحباً بك في خدوم' : 'Welcome to Khadom'
         });
         
-        // Navigate based on role
-        if (formData.role === 'host') {
-          navigate('/host/dashboard');
-        } else {
-          navigate('/guest/dashboard');
-        }
+        // Navigate to host dashboard
+        navigate('/host/dashboard');
       }
     } catch (error) {
       toast({
@@ -97,14 +92,12 @@ const Signup = () => {
   const translations = {
     ar: {
       title: 'إنشاء حساب جديد',
+      subtitle: 'للمالكين والمضيفين',
       name: 'الاسم الكامل',
       email: 'البريد الإلكتروني',
       phone: 'رقم الهاتف',
       password: 'كلمة المرور',
       confirmPassword: 'تأكيد كلمة المرور',
-      role: 'نوع الحساب',
-      host: 'مالك عقار',
-      guest: 'ضيف',
       signup: 'إنشاء الحساب',
       haveAccount: 'لديك حساب بالفعل؟',
       login: 'تسجيل الدخول',
@@ -114,14 +107,12 @@ const Signup = () => {
     },
     en: {
       title: 'Create New Account',
+      subtitle: 'For Property Owners & Hosts',
       name: 'Full Name',
       email: 'Email',
       phone: 'Phone Number',
       password: 'Password',
       confirmPassword: 'Confirm Password',
-      role: 'Account Type',
-      host: 'Property Owner',
-      guest: 'Guest',
       signup: 'Create Account',
       haveAccount: 'Already have an account?',
       login: 'Sign in',
@@ -150,26 +141,13 @@ const Signup = () => {
             <CardTitle className="text-2xl font-bold text-primary">
               {t_local('title')}
             </CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">
+              {t_local('subtitle')}
+            </p>
           </CardHeader>
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Role Selection */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">{t_local('role')}</label>
-                <Select 
-                  value={formData.role} 
-                  onValueChange={(value: any) => setFormData(prev => ({ ...prev, role: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="host">{t_local('host')}</SelectItem>
-                    <SelectItem value="guest">{t_local('guest')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
               {/* Name */}
               <div className="space-y-2">

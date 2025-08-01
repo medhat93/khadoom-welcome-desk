@@ -17,8 +17,7 @@ const Login = () => {
   
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
-    role: 'host' as 'host' | 'guest' | 'admin'
+    password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,7 +27,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const success = await login(formData.email, formData.password, formData.role);
+      const success = await login(formData.email, formData.password, 'host');
       
       if (success) {
         toast({
@@ -36,14 +35,8 @@ const Login = () => {
           description: language === 'ar' ? 'مرحباً بك في خدوم' : 'Welcome to Khadom'
         });
         
-        // Navigate based on role
-        if (formData.role === 'host') {
-          navigate('/host/dashboard');
-        } else if (formData.role === 'guest') {
-          navigate('/guest/dashboard');
-        } else if (formData.role === 'admin') {
-          navigate('/admin/dashboard');
-        }
+        // Navigate to host dashboard
+        navigate('/host/dashboard');
       } else {
         toast({
           title: language === 'ar' ? 'خطأ في تسجيل الدخول' : 'Login failed',
@@ -65,12 +58,9 @@ const Login = () => {
   const translations = {
     ar: {
       title: 'تسجيل الدخول',
+      subtitle: 'للمالكين والمضيفين',
       email: 'البريد الإلكتروني',
       password: 'كلمة المرور',
-      role: 'نوع الحساب',
-      host: 'مالك عقار',
-      guest: 'ضيف',
-      admin: 'مدير النظام',
       login: 'تسجيل الدخول',
       noAccount: 'ليس لديك حساب؟',
       signup: 'إنشاء حساب جديد',
@@ -78,13 +68,10 @@ const Login = () => {
       demoCredentials: 'بيانات تجريبية'
     },
     en: {
-      title: 'Login',
+      title: 'Sign In',
+      subtitle: 'For Property Owners & Hosts',
       email: 'Email',
       password: 'Password',
-      role: 'Account Type',
-      host: 'Property Owner',
-      guest: 'Guest',
-      admin: 'Admin',
       login: 'Sign In',
       noAccount: "Don't have an account?",
       signup: 'Sign up',
@@ -97,16 +84,13 @@ const Login = () => {
 
   // Demo credentials for easy testing
   const demoCredentials = [
-    { role: 'host', email: 'ahmed@example.com', label: 'Host Demo' },
-    { role: 'guest', email: 'sara@example.com', label: 'Guest Demo' },
-    { role: 'admin', email: 'admin@khadom.com', label: 'Admin Demo' }
+    { email: 'ahmed@example.com', label: 'Host Demo Account' }
   ];
 
   const fillDemo = (creds: typeof demoCredentials[0]) => {
     setFormData({
       email: creds.email,
-      password: 'demo123',
-      role: creds.role as any
+      password: 'demo123'
     });
   };
 
@@ -127,27 +111,13 @@ const Login = () => {
             <CardTitle className="text-2xl font-bold text-primary">
               {t_local('title')}
             </CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">
+              {t_local('subtitle')}
+            </p>
           </CardHeader>
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Role Selection */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">{t_local('role')}</label>
-                <Select 
-                  value={formData.role} 
-                  onValueChange={(value: any) => setFormData(prev => ({ ...prev, role: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="host">{t_local('host')}</SelectItem>
-                    <SelectItem value="guest">{t_local('guest')}</SelectItem>
-                    <SelectItem value="admin">{t_local('admin')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
               {/* Email */}
               <div className="space-y-2">
