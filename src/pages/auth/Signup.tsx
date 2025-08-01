@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Shield, Check } from 'lucide-react';
+import { Eye, EyeOff, Shield, Check, ArrowLeft } from 'lucide-react';
 
 const Signup = () => {
   const { language } = useLanguage();
@@ -127,6 +127,16 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-gradient-soft flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
+        {/* Back Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate('/')}
+          className="mb-4"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          {language === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}
+        </Button>
         {/* Logo */}
         <div className="text-center">
           <img 

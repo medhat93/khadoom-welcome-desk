@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
+import DashboardHeader from '@/components/DashboardHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import Header from '@/components/Header';
 import { Plus, Building, Users, DollarSign, TrendingUp, QrCode, Settings } from 'lucide-react';
 import type { Property, Unit } from '@/types';
 
@@ -111,7 +111,7 @@ const HostDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <DashboardHeader />
       
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
@@ -126,9 +126,6 @@ const HostDashboard = () => {
             <Button onClick={() => navigate('/host/add-property')} variant="cta">
               <Plus className="mr-2 h-4 w-4" />
               {t_local('addProperty')}
-            </Button>
-            <Button onClick={logout} variant="outline">
-              {t_local('logout')}
             </Button>
           </div>
         </div>
