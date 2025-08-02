@@ -27,7 +27,7 @@ interface CheckoutRequest {
   depositRefundStatus: 'pending' | 'full' | 'partial' | 'none';
   refundAmount?: number;
   refundReason?: string;
-  guestApproved?: boolean;
+  guestApproved?: boolean | 'rejected';
 }
 
 const HostDashboard = () => {
@@ -61,7 +61,7 @@ const HostDashboard = () => {
       depositRefundStatus: 'partial',
       refundAmount: 300,
       refundReason: 'كسر في الكوب',
-      guestApproved: false
+      guestApproved: 'rejected'
     },
     {
       id: '3',
@@ -220,7 +220,8 @@ const HostDashboard = () => {
       processDeposit: 'معالجة التأمين',
       pending: 'في الانتظار',
       approved: 'موافق عليه',
-      waitingApproval: 'في انتظار موافقة النزيل'
+      waitingApproval: 'في انتظار موافقة النزيل',
+      rejected: 'مرفوض من النزيل'
     },
     en: {
       dashboard: 'Dashboard',
@@ -256,7 +257,8 @@ const HostDashboard = () => {
       processDeposit: 'Process Deposit',
       pending: 'Pending',
       approved: 'Approved',
-      waitingApproval: 'Waiting for Guest Approval'
+      waitingApproval: 'Waiting for Guest Approval',
+      rejected: 'Rejected by Guest'
     }
   };
 
@@ -385,11 +387,13 @@ const HostDashboard = () => {
                               className={`${
                                 request.depositRefundStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                 request.depositRefundStatus === 'full' && request.guestApproved ? 'bg-green-100 text-green-800' :
+                                request.guestApproved === 'rejected' ? 'bg-red-100 text-red-800' :
                                 'bg-blue-100 text-blue-800'
                               }`}
                             >
                               {request.depositRefundStatus === 'pending' ? t_local('pending') :
                                request.depositRefundStatus === 'full' && request.guestApproved ? t_local('approved') :
+                               request.guestApproved === 'rejected' ? t_local('rejected') :
                                t_local('waitingApproval')}
                             </Badge>
                           </div>

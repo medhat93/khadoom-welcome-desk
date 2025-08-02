@@ -20,6 +20,7 @@ import SettingsPage from "./pages/host/Settings";
 import GuestCheckIn from "./pages/guest/CheckIn";
 import GuestDashboard from "./pages/guest/Dashboard";
 import GuestCheckOut from "./pages/guest/CheckOut";
+import DepositDecision from "./pages/guest/DepositDecision";
 import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
               <Route path="/guest/checkin/:unitId" element={<GuestCheckIn />} />
               <Route path="/guest/dashboard" element={<GuestDashboard />} />
               <Route path="/guest/checkout" element={<GuestCheckOut />} />
+              <Route path="/guest/deposit-decision/:requestId" element={<DepositDecision />} />
               
               {/* Admin Routes */}
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
