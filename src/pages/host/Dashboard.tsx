@@ -48,6 +48,45 @@ const HostDashboard = () => {
       guestReview: 'إقامة رائعة، النظافة ممتازة والموقع مثالي',
       rating: 5,
       depositRefundStatus: 'pending'
+    },
+    {
+      id: '2',
+      guestName: 'سارة أحمد',
+      unitName: 'الوحدة الثانية',
+      propertyName: 'شقة الروشة المطلة على البحر',
+      checkOutDate: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+      unitCondition: 'good',
+      guestReview: 'تجربة جيدة، لكن هناك بعض الأشياء التي تحتاج تحسين',
+      rating: 4,
+      depositRefundStatus: 'partial',
+      refundAmount: 300,
+      refundReason: 'كسر في الكوب',
+      guestApproved: false
+    },
+    {
+      id: '3',
+      guestName: 'محمد عبدالله',
+      unitName: 'الوحدة الثالثة',
+      propertyName: 'شقة الروشة المطلة على البحر',
+      checkOutDate: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+      unitCondition: 'poor',
+      guestReview: 'للأسف الوحدة لم تكن نظيفة عند الوصول',
+      rating: 2,
+      depositRefundStatus: 'none',
+      refundReason: 'أضرار في الأثاث وبقع على السجاد',
+      guestApproved: false
+    },
+    {
+      id: '4',
+      guestName: 'فاطمة علي',
+      unitName: 'الوحدة الرابعة',
+      propertyName: 'شقة الروشة المطلة على البحر',
+      checkOutDate: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+      unitCondition: 'excellent',
+      guestReview: 'كل شيء كان مثالي، شكراً لكم على الخدمة الرائعة',
+      rating: 5,
+      depositRefundStatus: 'full',
+      guestApproved: true
     }
   ]);
   
@@ -72,6 +111,7 @@ const HostDashboard = () => {
           id: '1',
           propertyId: '1',
           name: 'الوحدة الأولى',
+          description: '25 م² - تكييف - واي فاي - شرفة',
           depositAmount: 500,
           terms: 'شروط الإقامة الأساسية',
           checkInLink: '/guest/checkin/1',
@@ -82,11 +122,56 @@ const HostDashboard = () => {
           id: '2',
           propertyId: '1',
           name: 'الوحدة الثانية',
+          description: '30 م² - تكييف - واي فاي - مطبخ صغير',
           depositAmount: 500,
           terms: 'شروط الإقامة الأساسية',
           checkInLink: '/guest/checkin/2',
           qrCode: 'QR_CODE_2',
           status: 'available'
+        },
+        {
+          id: '3',
+          propertyId: '1',
+          name: 'الوحدة الثالثة',
+          description: '28 م² - تكييف - واي فاي - جاكوزي',
+          depositAmount: 600,
+          terms: 'شروط الإقامة الأساسية',
+          checkInLink: '/guest/checkin/3',
+          qrCode: 'QR_CODE_3',
+          status: 'occupied'
+        },
+        {
+          id: '4',
+          propertyId: '1',
+          name: 'الوحدة الرابعة',
+          description: '35 م² - تكييف - واي فاي - شرفة كبيرة',
+          depositAmount: 700,
+          terms: 'شروط الإقامة الأساسية',
+          checkInLink: '/guest/checkin/4',
+          qrCode: 'QR_CODE_4',
+          status: 'maintenance'
+        },
+        {
+          id: '5',
+          propertyId: '1',
+          name: 'الوحدة الخامسة',
+          description: '22 م² - تكييف - واي فاي - مدمجة',
+          depositAmount: 450,
+          terms: 'شروط الإقامة الأساسية',
+          checkInLink: '/guest/checkin/5',
+          qrCode: 'QR_CODE_5',
+          status: 'available'
+        },
+        {
+          id: '6',
+          propertyId: '1',
+          name: 'الوحدة السادسة',
+          description: '40 م² - تكييف - واي فاي - غرفتين',
+          depositAmount: 800,
+          terms: 'شروط الإقامة الأساسية',
+          checkInLink: '/guest/checkin/6',
+          qrCode: 'QR_CODE_6',
+          status: 'occupied'
         }
       ],
       createdAt: new Date()
