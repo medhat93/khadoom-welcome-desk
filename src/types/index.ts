@@ -26,12 +26,14 @@ export interface Unit {
   id: string;
   propertyId: string;
   name: string;
+  description?: string;
   depositAmount: number;
   terms: string;
   checkInLink: string;
   qrCode: string;
   status: 'available' | 'occupied' | 'maintenance';
   currentGuest?: Guest;
+  availableFrom?: Date; // When unit will be available again
 }
 
 // Guest types

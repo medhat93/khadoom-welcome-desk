@@ -20,6 +20,7 @@ const PropertyDetails = () => {
   const [showAddUnitDialog, setShowAddUnitDialog] = useState(false);
   const [newUnit, setNewUnit] = useState({
     name: '',
+    description: '',
     depositAmount: ''
   });
 
@@ -35,13 +36,16 @@ const PropertyDetails = () => {
       {
         id: '1',
         name: 'الوحدة الأولى',
+        description: '25 م² - تكييف - واي فاي - شرفة',
         depositAmount: 500,
         checkInLink: `${window.location.origin}/guest/checkin/1`,
-        status: 'occupied'
+        status: 'occupied',
+        availableFrom: new Date('2024-08-20') // Mock checkout date
       },
       {
         id: '2',
         name: 'الوحدة الثانية',
+        description: '30 م² - تكييف - واي فاي - مطبخ صغير',
         depositAmount: 500,
         checkInLink: `${window.location.origin}/guest/checkin/2`,
         status: 'available'
@@ -72,10 +76,14 @@ const PropertyDetails = () => {
       license: 'رقم الرخصة',
       addUnitDialog: 'إضافة وحدة جديدة',
       unitNameLabel: 'اسم الوحدة',
+      unitDescLabel: 'وصف الوحدة',
+      unitDescPlaceholder: 'مثال: 25 م² - تكييف - واي فاي',
       depositLabel: 'مبلغ التأمين (ريال)',
       cancel: 'إلغاء',
       addUnitBtn: 'إضافة وحدة',
-      unitAdded: 'تم إضافة الوحدة بنجاح'
+      unitAdded: 'تم إضافة الوحدة بنجاح',
+      availableFrom: 'متاحة من',
+      emptyAgain: 'ستكون فارغة في'
     },
     en: {
       propertyDetails: 'Property Details',
@@ -99,10 +107,14 @@ const PropertyDetails = () => {
       license: 'License Number',
       addUnitDialog: 'Add New Unit',
       unitNameLabel: 'Unit Name',
+      unitDescLabel: 'Unit Description',
+      unitDescPlaceholder: 'Example: 25 m² - A/C - WiFi',
       depositLabel: 'Deposit Amount (SAR)',
       cancel: 'Cancel',
       addUnitBtn: 'Add Unit',
-      unitAdded: 'Unit Added Successfully'
+      unitAdded: 'Unit Added Successfully',
+      availableFrom: 'Available from',
+      emptyAgain: 'Will be empty on'
     }
   };
 
@@ -120,6 +132,7 @@ const PropertyDetails = () => {
     const newUnitData = {
       id: unitId,
       name: newUnit.name,
+      description: newUnit.description,
       depositAmount: parseInt(newUnit.depositAmount),
       checkInLink: `${window.location.origin}/guest/checkin/${unitId}`,
       status: 'available' as const
@@ -130,7 +143,7 @@ const PropertyDetails = () => {
       units: [...prev.units, newUnitData]
     }));
 
-    setNewUnit({ name: '', depositAmount: '' });
+    setNewUnit({ name: '', description: '', depositAmount: '' });
     setShowAddUnitDialog(false);
     
     toast({
@@ -249,6 +262,17 @@ const PropertyDetails = () => {
                           />
                         </div>
                         <div>
+                          <Label htmlFor="unit-description" className="text-sm font-medium">
+                            {t('unitDescLabel')}
+                          </Label>
+                          <Input
+                            id="unit-description"
+                            value={newUnit.description}
+                            onChange={(e) => setNewUnit(prev => ({ ...prev, description: e.target.value }))}
+                            placeholder={t('unitDescPlaceholder')}
+                          />
+                        </div>
+                        <div>
                           <Label htmlFor="deposit-amount" className="text-sm font-medium">
                             {t('depositLabel')}
                           </Label>
@@ -286,11 +310,21 @@ const PropertyDetails = () => {
                   {property.units.map((unit) => (
                     <div key={unit.id} className="border rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-medium">{unit.name}</h4>
+                          {unit.description && (
+                            <p className="text-sm text-muted-foreground mb-1">
+                              {unit.description}
+                            </p>
+                          )}
                           <p className="text-sm text-muted-foreground">
                             {t('deposit')}: {unit.depositAmount} ر.س
                           </p>
+                          {unit.status === 'occupied' && unit.availableFrom && (
+                            <p className="text-xs text-orange-600 font-medium mt-1">
+                              {t('emptyAgain')}: {unit.availableFrom.toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}
+                            </p>
+                          )}
                         </div>
                         <Badge className={getStatusColor(unit.status)} variant="secondary">
                           {t(unit.status as any)}
