@@ -23,6 +23,7 @@ const GuestCheckIn = () => {
     phone: '',
     email: '',
     idNumber: '',
+    leavingDate: '',
     companions: [{ name: '', idNumber: '', relationship: '' }],
     paymentMethod: 'credit' as 'credit' | 'other',
     otherPaymentMethod: '',
@@ -78,6 +79,7 @@ const GuestCheckIn = () => {
       phone: 'رقم الهاتف',
       email: 'البريد الإلكتروني',
       idNumber: 'رقم الهوية',
+      leavingDate: 'تاريخ المغادرة',
       companions: 'المرافقين',
       addCompanion: 'إضافة مرافق',
       companionName: 'اسم المرافق',
@@ -117,6 +119,7 @@ const GuestCheckIn = () => {
       phone: 'Phone Number',
       email: 'Email',
       idNumber: 'ID Number',
+      leavingDate: 'Leaving Date',
       companions: 'Companions',
       addCompanion: 'Add Companion',
       companionName: 'Companion Name',
@@ -231,6 +234,16 @@ const GuestCheckIn = () => {
                   onChange={(e) => setFormData(prev => ({ ...prev, idNumber: e.target.value }))}
                   disabled={nafathVerified}
                   className={nafathVerified ? 'bg-green-50' : ''}
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">{t_local('leavingDate')}</label>
+                <Input
+                  type="date"
+                  value={formData.leavingDate}
+                  onChange={(e) => setFormData(prev => ({ ...prev, leavingDate: e.target.value }))}
+                  min={new Date().toISOString().split('T')[0]}
                 />
               </div>
 

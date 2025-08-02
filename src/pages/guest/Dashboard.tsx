@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,6 +24,7 @@ const GuestDashboard = () => {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [remainingDays, setRemainingDays] = useState(0);
 
   const translations = {
     ar: {
@@ -55,7 +56,11 @@ const GuestDashboard = () => {
       property: 'العقار',
       location: 'الموقع',
       noCompanions: 'لا يوجد مرافقين',
-      confirmCheckOut: 'هل أنت متأكد من تسجيل المغادرة؟'
+      confirmCheckOut: 'هل أنت متأكد من تسجيل المغادرة؟',
+      remainingDays: 'الأيام المتبقية',
+      daysLeft: 'يوم متبقي',
+      checkoutScheduled: 'مغادرة مجدولة في',
+      leavingDate: 'تاريخ المغادرة'
     },
     en: {
       dashboard: 'Guest Dashboard',
@@ -86,11 +91,24 @@ const GuestDashboard = () => {
       property: 'Property',
       location: 'Location',
       noCompanions: 'No companions',
-      confirmCheckOut: 'Are you sure you want to check out?'
+      confirmCheckOut: 'Are you sure you want to check out?',
+      remainingDays: 'Days Remaining',
+      daysLeft: 'days left',
+      checkoutScheduled: 'Checkout scheduled for',
+      leavingDate: 'Leaving Date'
     }
   };
 
   const t = (key: keyof typeof translations.ar) => translations[language][key];
+
+  // Calculate remaining days
+  useEffect(() => {
+    const leavingDate = new Date('2024-08-15'); // This would come from the guest data
+    const today = new Date();
+    const diffTime = leavingDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    setRemainingDays(Math.max(0, diffDays));
+  }, []);
 
   // Mock guest data - in real app, this would come from context/API
   const mockGuest: Guest = {
@@ -113,6 +131,7 @@ const GuestDashboard = () => {
       }
     ],
     checkInDate: new Date('2024-01-20'),
+    leavingDate: new Date('2024-08-15'),
     registrationCard: {
       id: 'rc1',
       guestApproved: true,
@@ -190,11 +209,16 @@ const GuestDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium">{t('checkInDate')}:</span>
                   <span>{mockGuest.checkInDate.toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">{t('leavingDate')}:</span>
+                  <span>{new Date('2024-08-15').toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}</span>
                 </div>
                 {mockGuest.checkOutDate && (
                   <div className="flex items-center gap-2">
@@ -203,6 +227,23 @@ const GuestDashboard = () => {
                     <span>{mockGuest.checkOutDate.toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}</span>
                   </div>
                 )}
+              </div>
+              
+              {/* Remaining Days Counter */}
+              <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-primary" />
+                    <span className="font-medium text-primary">{t('remainingDays')}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-primary">{remainingDays}</div>
+                    <div className="text-sm text-muted-foreground">{t('daysLeft')}</div>
+                  </div>
+                </div>
+                <div className="mt-2 text-sm text-muted-foreground">
+                  {t('checkoutScheduled')}: {new Date('2024-08-15').toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US')}
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -44,6 +44,7 @@ export interface Guest {
   idNumber: string;
   companions: Companion[];
   checkInDate: Date;
+  leavingDate?: Date;
   checkOutDate?: Date;
   registrationCard: RegistrationCard;
   deposit: Deposit;
