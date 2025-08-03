@@ -7,6 +7,8 @@ import { LanguageProvider } from "@/hooks/useLanguage";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Landing from "./pages/Landing";
+import RoleSelection from "./pages/RoleSelection";
+import BackToSelection from "./components/BackToSelection";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
@@ -33,8 +35,10 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <BackToSelection />
             <Routes>
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<RoleSelection />} />
+              <Route path="/landing" element={<Landing />} />
               <Route path="/waitlist" element={<Index />} />
               
               {/* Auth Routes */}
